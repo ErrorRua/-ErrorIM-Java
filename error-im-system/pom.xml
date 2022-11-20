@@ -10,7 +10,8 @@
     </parent>
     <groupId>com.error-im</groupId>
     <artifactId>error-im-system</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${error-im.version}</version>
+
     <name>error-im-system</name>
     <description>error-im-system</description>
     <properties>
@@ -20,7 +21,7 @@
         <dependency>
             <groupId>org.error</groupId>
             <artifactId>error-im-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${error-im.version}</version>
         </dependency>
     </dependencies>
 
