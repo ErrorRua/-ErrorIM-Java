@@ -3,6 +3,10 @@ package com.errorim.entity;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.Version;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -25,9 +29,13 @@ public class BaseEntity {
 
     //创建时间
     @TableField(fill= FieldFill.INSERT)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)		// 反序列化
+    @JsonSerialize(using = LocalDateTimeSerializer.class)		// 序列化
     private LocalDateTime createTime;
 
     //修改时间
     @TableField(fill=FieldFill.INSERT_UPDATE)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)		// 反序列化
+    @JsonSerialize(using = LocalDateTimeSerializer.class)		// 序列化
     private LocalDateTime updateTime;
 }

@@ -21,7 +21,7 @@ import static com.errorim.constants.SystemConstant.PARAMETER_VALIDATION;
  * @description:
  */
 
-//@RestControllerAdvice
+@RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
 
@@ -34,8 +34,8 @@ public class GlobalExceptionHandler {
     }
 
     //处理自定义异常
-    @ExceptionHandler(PlatformException.class)
-    public ResponseResult exception(PlatformException e) {
+    @ExceptionHandler(ErrorImException.class)
+    public ResponseResult exception(ErrorImException e) {
         log.error("出现了异常！{}", e.getMsg());
         return ResponseResult.errorResult(e.getCode(), e.getMsg());
     }
