@@ -24,19 +24,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Autowired
 	private UserMapper userMapper;
 
-//	@Autowired
-//	private MenuMapper menuMapper;
-
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		//根据用户名查询用户信息
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-		queryWrapper.eq(User::getUsername, username);
+		queryWrapper.eq(User::getEmail, email);
 
 		User user = userMapper.selectOne(queryWrapper);
 
 		if(Objects.isNull(user)){
-			throw new ErrorImException(HttpStatus.UNAUTHORIZED.value(),"用户名或密码错误");
+			throw new ErrorImException(HttpStatus.UNAUTHORIZED.value(),"邮箱或密码错误");
 		}
 		//TODO 根据用户查询权限信息 添加到LoginUser中
 
@@ -47,4 +43,28 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		//封装成UserDetails对象返回
 		return new LoginUser(user);
 	}
+
+//	@Autowired
+//	private MenuMapper menuMapper;
+
+//	@Override
+//	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//		//根据用户名查询用户信息
+//		LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+//		queryWrapper.eq(User::getUsername, username);
+//
+//		User user = userMapper.selectOne(queryWrapper);
+//
+//		if(Objects.isNull(user)){
+//			throw new ErrorImException(HttpStatus.UNAUTHORIZED.value(),"用户名或密码错误");
+//		}
+//		//TODO 根据用户查询权限信息 添加到LoginUser中
+//
+////		List<String> permissions = new ArrayList<>(Arrays.asList("test"));
+//
+////		List<String> permissions = menuMapper.selectPermsByUserId(user.getId());
+//
+//		//封装成UserDetails对象返回
+//		return new LoginUser(user);
+//	}
 }

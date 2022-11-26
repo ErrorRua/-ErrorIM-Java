@@ -2,6 +2,7 @@ package com.errorim.filter;
 
 
 import com.errorim.entity.LoginUser;
+import com.errorim.exception.ErrorImException;
 import com.errorim.util.JwtUtil;
 import com.errorim.util.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
+
+import static com.errorim.enums.UserCodeEnum.LOGIN_ERROR;
+import static com.errorim.enums.UserCodeEnum.USER_NOT_LOGIN;
 
 
 @Component
@@ -44,7 +48,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 		try {
 			uuid = JwtUtil.parseJWT(token).getSubject();
 		} catch (Exception e) {
-			request.setAttribute("filter.error", new RuntimeException("错误的token"));
+			request.setAttribute("filter.error", new ErrorImException(LOGIN_ERROR.getCode(), LOGIN_ERROR.getMessage()));
 			//将异常分发到/error/exthrow控制器
 			request.getRequestDispatcher("/error/exthrow").forward(request, response);
 			return;
@@ -55,7 +59,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
 		if (Objects.isNull(loginUser)) {
 			// 异常捕获，发送到error controller
-			request.setAttribute("filter.error", new RuntimeException("用户未登录"));
+			request.setAttribute("filter.error", new ErrorImException(USER_NOT_LOGIN.getCode(), USER_NOT_LOGIN.getMessage()));
 			//将异常分发到/error/exthrow控制器
 			request.getRequestDispatcher("/error/exthrow").forward(request, response);
 			return;

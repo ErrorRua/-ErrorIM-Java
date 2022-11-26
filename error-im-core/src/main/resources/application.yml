@@ -1,3 +1,5 @@
 spring:
   profiles:
-    active: dev
+    active: user, dev
+
+debug: true

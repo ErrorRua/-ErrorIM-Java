@@ -1,12 +1,15 @@
 package com.errorim.service.impl;
 
 
+import com.errorim.dto.LoginDTO;
 import com.errorim.entity.ResponseResult;
 import com.errorim.entity.User;
 import com.errorim.exception.ErrorImException;
+import com.errorim.security.EmailCodeAuthenticationToken;
 import com.errorim.service.LoginService;
 import com.errorim.util.JwtUtil;
 import com.errorim.util.RedisCache;
+import com.errorim.vo.LoginVO;
 import io.jsonwebtoken.Claims;
 
 import lombok.extern.slf4j.Slf4j;
@@ -34,9 +37,11 @@ public class LoginServiceImpl implements LoginService {
 	private RedisCache redisCache;
 
 	@Override
-	public ResponseResult login(User user) {
-		UsernamePasswordAuthenticationToken authentication =
-				new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+	public ResponseResult login(LoginDTO loginDTO) {
+//		UsernamePasswordAuthenticationToken authentication =
+//				new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword());
+		EmailCodeAuthenticationToken authentication =
+				new EmailCodeAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword());
 
 
 		Authentication authenticate = authenticationManager.authenticate(authentication);
@@ -50,12 +55,12 @@ public class LoginServiceImpl implements LoginService {
 		String uuid = UUID.randomUUID().toString();
 
 		String jwt = JwtUtil.createJWT(uuid);
-		Map<String, String> map = new HashMap<>();
-		map.put("token", jwt);
+		LoginVO loginVO = new LoginVO();
+		loginVO.setToken(jwt);
 
 		redisCache.setCacheObject(uuid, authenticate.getPrincipal());
 
-		return new ResponseResult(200, "登录成功", map);
+		return ResponseResult.okResult(loginVO);
 	}
 
 	@Override
@@ -70,6 +75,6 @@ public class LoginServiceImpl implements LoginService {
 
 		redisCache.deleteObject(uuid);
 
-		return new ResponseResult(200,"退出成功");
+		return ResponseResult.okResult();
 	}
 }

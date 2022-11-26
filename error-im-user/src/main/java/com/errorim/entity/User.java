@@ -2,6 +2,7 @@ package com.errorim.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 /**
@@ -24,6 +25,7 @@ public class User extends BaseEntity{
     /**
      * 密码
      */
+    @JsonIgnore
     private String password;
 
     /**
