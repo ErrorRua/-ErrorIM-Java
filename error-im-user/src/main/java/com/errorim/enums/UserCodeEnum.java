@@ -13,7 +13,7 @@ public enum UserCodeEnum implements BaseCode {
 
     REQUIRE_USERNAME(501, "请输入用户名"),
     USERNAME_EXIST(502, "用户名已存在"),
-    LOGIN_ERROR(503, "登录失败"),
+    LOGIN_ERROR(401, "登录失败"),
     REGISTER_ERROR(504, "注册失败"),
 
     // 验证码过期
