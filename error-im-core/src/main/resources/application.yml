@@ -1,5 +1,5 @@
 spring:
   profiles:
-    active: user, dev
+    active: upload, user, dev
 
 debug: true

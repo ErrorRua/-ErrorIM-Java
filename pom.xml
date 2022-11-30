@@ -11,6 +11,7 @@
         <module>error-im-core</module>
         <module>error-im-system</module>
         <module>error-im-user</module>
+        <module>error-im-upload</module>
     </modules>
     <packaging>pom</packaging>
 
