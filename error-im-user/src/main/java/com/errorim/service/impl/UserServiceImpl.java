@@ -106,7 +106,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseResult getUserInfo() {
-        User user = SecurityUtils.getLoginUser().getUser();
+        String userId = SecurityUtils.getUserId();
+        User user = userMapper.selectById(userId);
 
         UserInfoVO userInfoVO = BeanCopyUtils.copyBean(user, UserInfoVO.class);
 
