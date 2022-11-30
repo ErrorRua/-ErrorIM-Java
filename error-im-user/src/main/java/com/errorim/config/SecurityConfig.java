@@ -76,6 +76,7 @@ public class SecurityConfig {
                 .antMatchers("/user/register").anonymous()
                 .antMatchers("/user/forgetPassword").anonymous()
                 .antMatchers("/user/get-code").permitAll()
+                .antMatchers("/user/logout").permitAll()
                 .antMatchers("/user/get-email-code").permitAll()
                 .antMatchers("/user/verify-email").permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
