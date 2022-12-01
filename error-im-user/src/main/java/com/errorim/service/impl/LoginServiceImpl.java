@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -58,7 +59,7 @@ public class LoginServiceImpl implements LoginService {
 		LoginVO loginVO = new LoginVO();
 		loginVO.setToken(jwt);
 
-		redisCache.setCacheObject(uuid, authenticate.getPrincipal());
+		redisCache.setCacheObject(uuid, authenticate.getPrincipal(), 1, TimeUnit.DAYS);
 
 		return ResponseResult.okResult(loginVO);
 	}
