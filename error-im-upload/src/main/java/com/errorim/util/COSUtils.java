@@ -1,10 +1,9 @@
-package com.errorim.config.cos;
+package com.errorim.util;
 
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.BasicCOSCredentials;
 import com.qcloud.cos.auth.COSCredentials;
-
 import com.qcloud.cos.region.Region;
 import com.qcloud.cos.transfer.TransferManager;
 import com.qcloud.cos.transfer.TransferManagerConfiguration;
@@ -12,6 +11,7 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,34 +21,47 @@ import java.util.concurrent.Executors;
  * @date 2022/12/01
  * @description:
  */
-@Configuration
 @Data
-public class COSConfig {
+@Component
+public class COSUtils {
+
+    public static String secretId;
+    public static String secretKey;
+
+    public static String region;
+
+    public static String bucketName;
+
     @Value("${cos.secretId}")
-    private String secretId;
+    public void setSecretId(String secretId) {
+        COSUtils.secretId = secretId;
+    }
     @Value("${cos.secretKey}")
-    private String secretKey;
-
+    public void setSecretKey(String secretKey) {
+        COSUtils.secretKey = secretKey;
+    }
     @Value("${cos.region}")
-    private String region;
-
+    public void setRegion(String region) {
+        COSUtils.region = region;
+    }
     @Value("${cos.bucketName}")
-    private String bucketName;
+    public void setBucketName(String bucketName) {
+        COSUtils.bucketName = bucketName;
+    }
 
-    @Bean
     // 创建 COSClient 实例
-    public COSClient cosClient(){
+    public static COSClient cosClient(){
         // 1 初始化用户身份信息（secretId, secretKey）。
-        COSCredentials cred = new BasicCOSCredentials(this.secretId, this.secretKey);
+        COSCredentials cred = new BasicCOSCredentials(secretId, secretKey);
         // 2 设置 bucket 的区域, COS 地域的简称请参照
-        Region region = new Region(this.region);
+        Region region = new Region(COSUtils.region);
         ClientConfig clientConfig = new ClientConfig(region);
         // 3 生成 cos 客户端。
         return new COSClient(cred, clientConfig);
     }
 
     // 创建 TransferManager 实例，这个实例用来后续调用高级接口
-    public TransferManager createTransferManager() {
+    public static TransferManager createTransferManager() {
         // 创建一个 COSClient 实例，这是访问 COS 服务的基础实例。
         COSClient cosClient = cosClient();
 

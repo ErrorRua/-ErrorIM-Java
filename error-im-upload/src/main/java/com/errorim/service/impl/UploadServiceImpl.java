@@ -1,22 +1,17 @@
 package com.errorim.service.impl;
 
-import com.alibaba.fastjson2.util.UUIDUtils;
-import com.errorim.config.cos.COSConfig;
 import com.errorim.dto.UpdateInfoDTO;
 import com.errorim.entity.ResponseResult;
 import com.errorim.exception.ErrorImException;
 import com.errorim.service.UploadService;
 import com.errorim.service.UserService;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.errorim.util.COSUtils;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.AnonymousCOSCredentials;
 import com.qcloud.cos.auth.COSCredentials;
-import com.qcloud.cos.http.HttpProtocol;
 import com.qcloud.cos.model.ObjectMetadata;
-import com.qcloud.cos.model.PutObjectResult;
 import com.qcloud.cos.region.Region;
-import com.qcloud.cos.transfer.TransferManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,12 +32,6 @@ import static com.errorim.enums.UploadEnum.UPLOAD_AVATAR_FAIL;
 public class UploadServiceImpl implements UploadService {
 
     @Autowired
-    private COSConfig cosConfig;
-
-    @Autowired
-    private COSClient cosClient;
-
-    @Autowired
     private UserService userService;
 
     //    图片格式
@@ -50,6 +39,8 @@ public class UploadServiceImpl implements UploadService {
 
     @Override
     public ResponseResult uploadAvatar(MultipartFile avatar) {
+        COSClient cosClient = COSUtils.cosClient();
+
         try {
             //获取文件上传的流
             InputStream inputStream = avatar.getInputStream();
@@ -70,7 +61,8 @@ public class UploadServiceImpl implements UploadService {
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentLength(avatar.getSize());
 
-            cosClient.putObject(cosConfig.getBucketName(),
+
+            cosClient.putObject(COSUtils.bucketName,
                     fileName,
                     inputStream,
                     objectMetadata);
@@ -112,12 +104,12 @@ public class UploadServiceImpl implements UploadService {
 
         ClientConfig clientConfig = new ClientConfig();
 
-        clientConfig.setRegion(new Region(cosConfig.getRegion()));
+        clientConfig.setRegion(new Region(COSUtils.region));
 
 
         COSClient cosClient = new COSClient(cred, clientConfig);
 
 
-        return cosClient.getObjectUrl(cosConfig.getBucketName(), fileName).toString();
+        return cosClient.getObjectUrl(COSUtils.bucketName, fileName).toString();
     }
 }
