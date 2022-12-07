@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>org.error</groupId>
-            <artifactId>error-im-upload</artifactId>
+            <artifactId>error-im-contact</artifactId>
             <version>${error-im.version}</version>
         </dependency>
     </dependencies>
