@@ -20,5 +20,6 @@ public class UpdateInfoDTO {
 
     private String email;
 
+    private String sex;
 
 }
