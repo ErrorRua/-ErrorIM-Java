@@ -12,6 +12,7 @@
         <module>error-im-system</module>
         <module>error-im-user</module>
         <module>error-im-upload</module>
+        <module>error-im-contact</module>
     </modules>
     <packaging>pom</packaging>
 
