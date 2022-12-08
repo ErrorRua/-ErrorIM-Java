@@ -11,6 +11,7 @@ import com.errorim.util.BeanCopyUtils;
 import com.errorim.util.RedisCache;
 import com.errorim.util.SecurityUtils;
 import com.errorim.vo.FriendVO;
+import org.apache.commons.codec.binary.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.errorim.constant.ContactConstant.CACHE_CONTACT_KEY;
+import static com.errorim.enums.ContactEnum.CAN_NOT_ADD_SELF;
 import static com.errorim.enums.ContactEnum.IS_FRIEND;
 import static com.errorim.enums.UserCodeEnum.USER_NOT_EXIST;
 
@@ -75,6 +77,10 @@ public class ContactServiceImpl implements ContactService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResponseResult addFriend(String friendId) {
+        if (StringUtils.equals(SecurityUtils.getUserId(), friendId)) {
+            return ResponseResult.errorResult(CAN_NOT_ADD_SELF.getCode(), CAN_NOT_ADD_SELF.getMessage());
+        }
+
         User user = userMapper.selectById(friendId);
 
         if (Objects.isNull(user)) {
@@ -129,6 +135,8 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public ResponseResult searchUser(String email) {
+//        为了方便前端 isFriend 字段的取值分别是 0 不是好友 1 是好友 2 是自己
+
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getEmail, email);
 
