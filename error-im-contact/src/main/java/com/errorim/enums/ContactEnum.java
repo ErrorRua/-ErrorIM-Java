@@ -12,6 +12,9 @@ public enum ContactEnum implements BaseCode {
     IS_FRIEND(500, "对方已经是好友了"),
     // 不能添加自己为好友
     CAN_NOT_ADD_SELF(501, "不能添加自己为好友"),
+    // 好友请求不存在
+    FRIEND_REQUEST_NOT_EXIST(502, "好友请求不存在"),
+    NOT_YOUR_REQUEST(503, "不是你的好友请求"),
     ;
 
     private final Integer code;

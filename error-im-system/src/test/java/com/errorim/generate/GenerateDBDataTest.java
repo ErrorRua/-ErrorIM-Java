@@ -1,7 +1,9 @@
 package com.errorim.generate;
 
+import com.errorim.entity.AddFriendRequest;
 import com.errorim.entity.Contact;
 import com.errorim.entity.User;
+import com.errorim.mapper.AddFriendRequestMapper;
 import com.errorim.mapper.ContactMapper;
 import com.errorim.mapper.UserMapper;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -30,6 +32,9 @@ public class GenerateDBDataTest {
 
     @Autowired
     private ContactMapper contactMapper;
+
+    @Autowired
+    private AddFriendRequestMapper addFriendRequestMapper;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -79,5 +84,58 @@ public class GenerateDBDataTest {
                 }});
             }
         });
+    }
+
+    /**
+     * @param :
+     * @return void
+     * @description: 批量生成用户好友请求数据
+     * @author ErrorRua
+     * @date 2022/12/2
+     */
+    @Test
+    void generateUserContactRequest() {
+
+        List<User> users = userMapper.selectList(null);
+
+        List<String> ids = users.stream().map(User::getUserId).collect(Collectors.toList());
+
+        Stream.generate(() -> new AddFriendRequest(){{
+            setFromUserId(ids.get(RandomUtils.nextInt(0, ids.size())));
+            setToUserId(ids.get(RandomUtils.nextInt(0, ids.size())));
+            setStatus((int) (Math.pow(-1, RandomUtils.nextInt(1, 3)) * RandomUtils.nextInt(0, 2)));
+        }}).limit(2000).forEach(addFriendRequest -> {
+            if (!Objects.equals(addFriendRequest.getFromUserId(), addFriendRequest.getToUserId())) {
+                addFriendRequestMapper.insert(addFriendRequest);
+            }
+        });
+
+    }
+
+    /**
+     * @param :
+     * @return void
+     * @description: 批量生成用户好友请求数据(指定id)
+     * @author ErrorRua
+     * @date 2022/12/2
+     */
+    @Test
+    void generateUserContactRequestSpecify() {
+        String specifyId = "1595419368528044034";
+
+        List<User> users = userMapper.selectList(null);
+
+        List<String> ids = users.stream().map(User::getUserId).collect(Collectors.toList());
+
+        Stream.generate(() -> new AddFriendRequest(){{
+            setFromUserId(ids.get(RandomUtils.nextInt(0, ids.size())));
+            setToUserId(specifyId);
+            setStatus((int) (Math.pow(-1, RandomUtils.nextInt(1, 3)) * RandomUtils.nextInt(0, 2)));
+        }}).limit(20).forEach(addFriendRequest -> {
+            if (!Objects.equals(addFriendRequest.getFromUserId(), addFriendRequest.getToUserId())) {
+                addFriendRequestMapper.insert(addFriendRequest);
+            }
+        });
+
     }
 }
