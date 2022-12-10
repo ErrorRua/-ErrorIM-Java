@@ -1,6 +1,6 @@
 package com.errorim.util;
 
-import com.errorim.annotation.MapMatch;
+import com.errorim.annotation.MapIgnore;
 import org.springframework.beans.BeanUtils;
 
 import java.util.Arrays;
@@ -45,7 +45,7 @@ public class BeanCopyUtils {
         if (obj == null) {
             return map;
         }
-        Arrays.stream(obj.getClass().getDeclaredFields()).filter(field -> field.isAnnotationPresent(MapMatch.class)).forEach(field -> {
+        Arrays.stream(obj.getClass().getDeclaredFields()).filter(field -> !field.isAnnotationPresent(MapIgnore.class)).forEach(field -> {
             try {
                 field.setAccessible(true);
                 map.put(field.getName(), field.get(obj));
@@ -54,6 +54,29 @@ public class BeanCopyUtils {
             }
         });
         return map;
+    }
+
+    // 将map转换为对象
+    public static <T> T mapToBean(Map<String, Object> map, Class<T> clazz) {
+        T obj = null;
+        if (map == null) {
+            return obj;
+        }
+        try {
+            obj = clazz.newInstance();
+            T finalObj = obj;
+            Arrays.stream(obj.getClass().getDeclaredFields()).filter(field -> !field.isAnnotationPresent(MapIgnore.class)).forEach(field -> {
+                try {
+                    field.setAccessible(true);
+                    field.set(finalObj, map.get(field.getName()));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return obj;
     }
 }
 

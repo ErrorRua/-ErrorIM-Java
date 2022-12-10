@@ -12,6 +12,6 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MapMatch {
+public @interface MapIgnore {
     boolean value() default true;
 }
