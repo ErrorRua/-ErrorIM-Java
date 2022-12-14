@@ -77,6 +77,7 @@ public class SecurityConfig {
                 .antMatchers("/user/forgetPassword").anonymous()
                 .antMatchers("/user/get-code").permitAll()
                 .antMatchers("/user/logout").permitAll()
+                .antMatchers("/error/exthrow").permitAll()
                 .antMatchers("/user/get-email-code").permitAll()
                 .antMatchers("/user/verify-email").permitAll()
                 .antMatchers("/websocket").permitAll()

@@ -2,6 +2,7 @@ package com.errorim.config;
 
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -23,8 +24,8 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     // TODO 暂时使用内存存储，后期改为redis
     @Bean
-    public Set<String> userSet() {
-        return Collections.newSetFromMap(new ConcurrentHashMap<>(48));
+    public ConcurrentHashMap<String, String> userMap() {
+        return new ConcurrentHashMap<>(48);
     }
 
     @Override

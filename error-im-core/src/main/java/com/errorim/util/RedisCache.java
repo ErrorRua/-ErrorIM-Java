@@ -250,7 +250,7 @@ public class RedisCache {
      * @param recordIds
      * @return
      */
-    public Long ack(String key, String group, String... recordIds){
+    public Long ackMessage(String key, String group, String... recordIds){
         return redisTemplate.opsForStream().acknowledge(key, group, recordIds);
     }
 
@@ -261,13 +261,13 @@ public class RedisCache {
      * @param value
      * @return
      */
-    public String add(String key, String field, Object value){
+    public String addMessage(String key, String field, Object value){
         Map<String, Object> content = new HashMap<>(1);
         content.put(field, value);
-        return add(key, content);
+        return addMessage(key, content);
     }
 
-    public String add(String key, Map<String, Object> content){
+    public String addMessage(String key, Map<String, Object> content){
         return redisTemplate.opsForStream().add(key, content).getValue();
     }
 
@@ -278,7 +278,7 @@ public class RedisCache {
      * @param recordIds
      * @return
      */
-    public Long del(String key, String... recordIds){
+    public Long delMessage(String key, String... recordIds){
         return redisTemplate.opsForStream().delete(key, recordIds);
     }
 
@@ -287,7 +287,7 @@ public class RedisCache {
      * @param key
      * @return
      */
-    public Long len(String key){
+    public Long messageQueueLen(String key){
         return redisTemplate.opsForStream().size(key);
     }
 
@@ -296,7 +296,7 @@ public class RedisCache {
      * @param key
      * @return
      */
-    public List<MapRecord<String, Object, Object>> read(String key){
+    public List<MapRecord<String, Object, Object>> readMessage(String key){
         return redisTemplate.opsForStream().read(StreamOffset.fromStart(key));
     }
 
@@ -306,7 +306,7 @@ public class RedisCache {
      * @param recordId
      * @return
      */
-    public List<MapRecord<String, Object, Object>> read(String key, String recordId){
+    public List<MapRecord<String, Object, Object>> readMessage(String key, String recordId){
         return redisTemplate.opsForStream().read(StreamOffset.from(MapRecord.create(key, new HashMap<>(1)).withId(RecordId.of(recordId))));
     }
 
