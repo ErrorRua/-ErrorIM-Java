@@ -1,3 +1,5 @@
+### 新版本后端地址 https://github.com/ErrorRua/Error-IM (开发更新中)
+
 ### 前端页面展示
 项目地址： https://gitee.com/errorrua/error-im-pc
 
